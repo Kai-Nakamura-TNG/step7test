@@ -5,22 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Company;
+use App\Http\Requests\ProductRequest;
 
 class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Product::query();
-
-        if ($request->filled('keyword')) {
-            $query->where('product_name', 'like', '%' . $request->keyword . '%');
-        }
-
-        if ($request->filled('company_id')) {
-            $query->where('company_id', $request->company_id);
-        }
-
-        $products = $query->get();
+        $products = Product::search($request->keyword, $request->company_id)->get();
         $companies = Company::all();
 
         return view('products.index', compact('products', 'companies'));
@@ -32,23 +23,10 @@ class ProductController extends Controller
         return view('products.create', compact('companies'));
     }
 
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
-        $request->validate([
-            'product_name' => 'required',
-            'company_id' => 'required',
-            'price' => 'required|numeric',
-            'stock' => 'required|numeric',
-        ]);
+        Product::createWithImage($request->all(), $request->file('img_path'));
 
-        $data = $request->all();
-
-        if ($request->hasFile('img_path')) {
-            $path = $request->file('img_path')->store('products', 'public');
-            $data['img_path'] = $path;
-        }
-        
-        Product::create($data);
         return redirect()->route('products.index');
     }
 
@@ -65,31 +43,19 @@ class ProductController extends Controller
         return view('products.edit', compact('product', 'companies'));
     }
 
-    public function update(Request $request, $id)
+    public function update(ProductRequest $request, $id)
     {
-        $request->validate([
-            'product_name' => 'required',
-            'company_id' => 'required',
-            'price' => 'required|numeric',
-            'stock' => 'required|numeric',
-        ]);
-
         $product = Product::find($id);
-        $data = $request->all();
+        $product->updateWithImage($request->all(), $request->file('img_path'));
 
-        if ($request->hasFile('img_path')) {
-            $path = $request->file('img_path')->store('products', 'public');
-            $data['img_path'] = $path;
-        }
-
-        $product->update($data);
         return redirect()->route('products.index');
     }
 
     public function destroy($id)
     {
         $product = Product::find($id);
-        $product->delete();
+        $product->deleteWithImage();
+        
         return redirect()->route('products.index');
     }
 }
