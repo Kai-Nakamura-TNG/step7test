@@ -25,9 +25,13 @@ class ProductController extends Controller
 
     public function store(ProductRequest $request)
     {
-        Product::createWithImage($request->all(), $request->file('img_path'));
+        try {
+            Product::createWithImage($request->all(), $request->file('img_path'));
 
-        return redirect()->route('products.index');
+            return redirect()->route('products.create');
+        } catch (\Exception $e) {
+            return redirect()->route('products.create')->with('error', '登録に失敗しました');
+        }
     }
 
     public function show($id)
@@ -45,17 +49,26 @@ class ProductController extends Controller
 
     public function update(ProductRequest $request, $id)
     {
-        $product = Product::find($id);
-        $product->updateWithImage($request->all(), $request->file('img_path'));
+        try {
+            $product = Product::find($id);
+            $product->updateWithImage($request->all(), $request->file('img_path'));
 
-        return redirect()->route('products.index');
+            return redirect()->route('products.edit', $id);
+        } catch (\Exception $e) {
+            return redirect()->route('products.edit', $id)->with('error', '更新に失敗しました');
+        }
     }
 
     public function destroy($id)
     {
-        $product = Product::find($id);
-        $product->deleteWithImage();
+        try {
+            $product = Product::find($id);
+            $product->deleteWithImage();
         
-        return redirect()->route('products.index');
+            return redirect()->route('products.index');
+        } catch (\Exception $e) {
+            return redirect()->route('products.index')->with('error' , '削除に失敗しました');
+        }
+    
     }
 }
