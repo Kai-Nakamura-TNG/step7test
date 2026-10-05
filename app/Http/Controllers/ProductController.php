@@ -64,11 +64,10 @@ class ProductController extends Controller
         try {
             $product = Product::find($id);
             $product->deleteWithImage();
-        
-            return redirect()->route('products.index');
+
+            return response()->json(['success' => true, 'message' => '削除しました']);
         } catch (\Exception $e) {
-            return redirect()->route('products.index')->with('error' , '削除に失敗しました');
+            return response()->json(['success' => false, 'message' =>'削除に失敗しました'], 500);
         }
-    
     }
 }

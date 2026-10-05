@@ -55,7 +55,7 @@
                         <a href="{{ route('products.show', $product->id) }}" class="btn btn-info btn-sm text-white">詳細</a>
                     </td>
                     <td>
-                        <form action="{{ route('products.destroy', $product->id) }}" method="POST" onsubmit="return confirm('本当に削除しますか？');">
+                        <form action="{{ route('products.destroy', $product->id) }}" method="POST"  class='product_delete-form'>
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger btn-sm">削除</button>
@@ -67,3 +67,7 @@
     </table>
 </div>
 @endsection
+
+@push('scripts')
+    <script src="{{ asset('js/product.js') }}"></script>
+@endpush
