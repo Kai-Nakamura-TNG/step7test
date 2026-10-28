@@ -17,6 +17,18 @@
             </select>
         </div>
         <div class="col-auto">
+            <input type="number" name="min_price" value="{{ request('min_price') }}" min="0" placeholder="価格(下限)" class="form-control">
+        </div>
+        <div class="col-auto">
+            <input type="number" name="max_price" value="{{ request('max_price') }}" min="0" placeholder="価格(上限)" class="form-control">
+        </div>
+        <div class="col-auto">
+            <input type="number" name="min_stock" value="{{ request('min_stock') }}" min="0" placeholder="在庫数(下限)" class="form-control">
+        </div>
+        <div class="col-auto">
+            <input type="number" name="max_stock" value="{{ request('max_stock') }}" min="0" placeholder="在庫数(上限)" class="form-control">
+        </div>
+        <div class="col-auto">
             <button type="submit" class="btn btn-info text-white">検索</button>
         </div>
     </form>

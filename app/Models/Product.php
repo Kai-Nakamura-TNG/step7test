@@ -25,14 +25,30 @@ class Product extends Model
         return $this->belongsTo(Company::class);
     }
 
-    public function scopeSearch($query, $keyword, $companyId)
+    public function scopeSearch($query, $search_conditions)
     {
-        if ($keyword) {
-            $query->where('product_name', 'like', '%' . $keyword . '%');
+        if (isset($search_conditions['keyword'])) {
+            $query->where('product_name', 'like', '%' . $search_conditions['keyword'] . '%');
         }
 
-        if ($companyId) {
-            $query->where('company_id', $companyId);
+        if (isset($search_conditions['company_id'])) {
+            $query->where('company_id', $search_conditions['company_id']);
+        }
+
+        if (isset($search_conditions['min_price'])) {
+            $query->where('price', '>=', $search_conditions['min_price']);
+        }
+
+        if (isset($search_conditions['max_price'])) {
+            $query->where('price', '<=', $search_conditions['max_price']);
+        }
+
+        if (isset($search_conditions['min_stock'])) {
+            $query->where('stock', '>=', $search_conditions['min_stock']);
+        }
+
+        if (isset($search_conditions['max_stock'])) {
+            $query->where('stock', '<=', $search_conditions['max_stock']);
         }
 
         return $query;
@@ -40,7 +56,7 @@ class Product extends Model
 
     public static function createWithImage($data, $image)
     {
-        if ($image){
+        if ($image) {
             $path = $image->store('products', 'public');
             $data['img_path'] = $path;
         }
@@ -50,7 +66,7 @@ class Product extends Model
 
     public function updateWithImage($data, $image)
     {
-        if ($image){
+        if ($image) {
             $path = $image->store('products', 'public');
             $data['img_path'] = $path;
         }

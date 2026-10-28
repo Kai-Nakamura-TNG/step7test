@@ -11,7 +11,15 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        $products = Product::search($request->keyword, $request->company_id)->get();
+        $search_conditions = $request->only([
+            'keyword',
+            'company_id',
+            'min_price',
+            'max_price',
+            'min_stock',
+            'max_stock',
+        ]);
+        $products = Product::search($search_conditions)->get();
         $companies = Company::all();
 
         return view('products.index', compact('products', 'companies'));
