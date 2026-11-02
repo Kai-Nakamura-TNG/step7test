@@ -20,6 +20,11 @@ class ProductController extends Controller
             'max_stock',
         ]);
         $products = Product::search($search_conditions)->get();
+
+        if ($request->ajax()) {
+            return view('products.partials.product_rows', compact('products'));
+        }
+
         $companies = Company::all();
 
         return view('products.index', compact('products', 'companies'));

@@ -4,7 +4,7 @@
 <div class="container mt-4">
     <h1 class="mb-4">商品一覧</h1>
 
-    <form action="{{ route('products.index') }}" method="GET" class="row g-2 mb-3">
+    <form action="{{ route('products.index') }}" method="GET" class="row g-2 mb-3 product_search-form">
         <div class="col-auto">
             <input type="text" name="keyword" value="{{ request('keyword') }}" placeholder="商品名で検索" class="form-control">
         </div>
@@ -48,33 +48,8 @@
                 <th>削除</th>
             </tr>
         </thead>
-        <tbody>
-            @foreach ($products as $product)
-                <tr>
-                    <td>{{ $product->id }}</td>
-                    <td>
-                        @if ($product->img_path)
-                            <img src="{{ asset('storage/' . $product->img_path) }}" alt="{{ $product->product_name }}" width="60">
-                        @else
-                            なし
-                        @endif
-                    </td>
-                    <td>{{ $product->product_name }}</td>
-                    <td>{{ $product->price }}</td>
-                    <td>{{ $product->stock }}</td>
-                    <td>{{ $product->company->company_name }}</td>
-                    <td>
-                        <a href="{{ route('products.show', $product->id) }}" class="btn btn-info btn-sm text-white">詳細</a>
-                    </td>
-                    <td>
-                        <form action="{{ route('products.destroy', $product->id) }}" method="POST"  class='product_delete-form'>
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm">削除</button>
-                        </form>
-                    </td>
-                </tr>
-            @endforeach
+        <tbody id="productTableBody">
+            @include('products.partials.product_rows')
         </tbody>
     </table>
 </div>
