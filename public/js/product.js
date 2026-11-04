@@ -1,4 +1,13 @@
 $(function() {
+    $('#productTable').tablesorter({
+        sortList: [[0, 1]],
+        headers: {
+            1: { sorter: false },
+            6: { sorter: false },
+            7: { sorter: false },
+        },
+    });
+
     $(document).on('submit', '.product_delete-form', function(e) {
         e.preventDefault();
         if (!confirm('本当に削除しますか？')) {
@@ -13,6 +22,7 @@ $(function() {
             data: delete_form.serialize(),
         }).done(function(response) {
             delete_form.closest('tr').remove();
+            $('#productTable').trigger('update');
         }).fail(function() {
             alert('削除に失敗しました');
         });
@@ -29,6 +39,7 @@ $(function() {
             data: search_form.serialize(),
         }).done(function(html) {
             $('#productTableBody').html(html);
+            $('#productTable').trigger('update');
         }).fail(function() {
             alert('検索に失敗しました');
         });

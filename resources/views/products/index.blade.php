@@ -35,7 +35,7 @@
 
     <a href="{{ route('products.create') }}" class="btn btn-warning mb-3">新規登録</a>
 
-    <table class="table table-striped table-bordered align-middle">
+    <table class="table table-striped table-bordered align-middle" id="productTable">
         <thead class="table-light">
             <tr>
                 <th>ID</th>
@@ -56,5 +56,6 @@
 @endsection
 
 @push('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.32.0/js/jquery.tablesorter.min.js" integrity="sha512-O/JP2r8BG27p5NOtVhwqsSokAwEP5RwYgvEzU9G6AfNjLYqyt2QT8jqU1XrXCiezS50Qp1i3ZtCQWkHZIRulGA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="{{ asset('js/product.js') }}"></script>
 @endpush
