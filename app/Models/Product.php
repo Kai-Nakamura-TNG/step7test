@@ -5,7 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 use App\Models\Company;
+use App\Models\Sale;
 
 class Product extends Model
 {
@@ -23,6 +25,11 @@ class Product extends Model
     public function company()
     {
         return $this->belongsTo(Company::class);
+    }
+
+    public function sales()
+    {
+        return $this->hasMany(Sale::class);
     }
 
     public function scopeSearch($query, $search_conditions)
@@ -83,5 +90,13 @@ class Product extends Model
         }
 
         return $this->delete();
+    }
+
+    public function purchase()
+    {
+        DB::transaction(function () {
+            $this->sales()->create();
+            $this->decrement('stock');
+        });
     }
 }
