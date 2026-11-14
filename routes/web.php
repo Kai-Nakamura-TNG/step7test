@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,11 +21,11 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/products', [App\Http\Controllers\ProductController::class, 'index'])->name('products.index')->middleware('auth');
-Route::get('/products/create', [App\Http\Controllers\ProductController::class, 'create'])->name('products.create')->middleware('auth');
-Route::post('/products', [App\Http\Controllers\ProductController::class, 'store'])->name('products.store')->middleware('auth');
-Route::get('/products/{id}', [App\Http\Controllers\ProductController::class, 'show'])->name('products.show')->middleware('auth');
-Route::get('/products/{id}/edit', [App\Http\Controllers\ProductController::class, 'edit'])->name('products.edit')->middleware('auth');
-Route::put('/products/{id}', [App\Http\Controllers\ProductController::class, 'update'])->name('products.update')->middleware('auth');
-Route::delete('/products/{id}', [App\Http\Controllers\ProductController::class, 'destroy'])->name('products.destroy')->middleware('auth');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/products', [ProductController::class, 'index'])->name('products.index')->middleware('auth');
+Route::get('/products/create', [ProductController::class, 'create'])->name('products.create')->middleware('auth');
+Route::post('/products', [ProductController::class, 'store'])->name('products.store')->middleware('auth');
+Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show')->middleware('auth');
+Route::get('/products/{id}/edit', [ProductController::class, 'edit'])->name('products.edit')->middleware('auth');
+Route::put('/products/{id}', [ProductController::class, 'update'])->name('products.update')->middleware('auth');
+Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('products.destroy')->middleware('auth');
